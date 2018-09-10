@@ -1,0 +1,26 @@
+words
+word = random word
+
+guesses = empty list
+guesses_left = 7
+
+while user has guesses_left:
+    display guesses
+    guess = get user guess
+
+    if guess is not in word:
+        display "wrong"
+        guesses_left -= 1
+    else:
+        display "correct"
+    display status guesses word
+else:
+    display "game over"
+
+get user guess:
+    input = user input
+    if input is not a letter:
+        display "that's not a letter"
+        input = user input
+
+display status guesses words
