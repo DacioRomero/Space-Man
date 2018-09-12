@@ -2,67 +2,65 @@
 
 import random
 
-# List of words from https://www.ef.edu/english-resources/english-vocabulary/top-100-words/
-WORDS = ('a', 'about', 'all', 'also', 'and', 'as', 'at', 'be', 'because', 'but', 'by', 'can', 'come', 'could', 'day', 'do', 'even', 'find', 'first', 'for', 'from', 'get', 'give', 'go', 'have', 'he', 'her', 'here', 'him', 'his', 'how', 'I', 'if', 'in', 'into', 'it', 'its', 'just', 'know', 'like', 'look', 'make', 'man', 'many', 'me', 'more', 'my', 'new', 'no', 'not', 'now', 'of', 'on', 'one', 'only', 'or', 'other', 'our', 'out', 'people', 'say', 'see', 'she', 'so', 'some', 'take', 'tell', 'than', 'that', 'the', 'their', 'them', 'then', 'there', 'these', 'they', 'thing', 'think', 'this', 'those', 'time', 'to', 'two', 'up', 'use', 'very', 'want', 'way', 'we', 'well', 'what', 'when', 'which', 'who', 'will', 'with', 'would', 'year', 'you', 'your')
+class SpaceMan():
+    def __init__(self, words):
+        self.word = random.choice(words)
+        self.word_set = set(self.word)
+        self.guesses = set()
 
-# Space Man game
-def main():
-    word = random.choice(WORDS) # Get a random word
+    def run_game(self):
+        game_over = False
 
-    word_set = set(word) # Get all unique letters
-    guesses = set() # Unique guesses
+        while not game_over:
+            self.print_formatted_word()
+            guess = self.get_letter_input()
 
-    game_over = False
+            while guess in self.guesses:
+                print('Already guesssed!')
+                self.print_guesses()
+                guess = self.get_letter_input()
 
-    while not game_over:
-        print_formatted_word(word, guesses)
-        guess = get_letter_input()
+            self.guesses.add(guess)
 
-        while guess in guesses:
-            print('Already guesssed!')
-            print_guesses(guesses)
-            guess = get_letter_input()
+            self.print_guesses()
 
-        guesses.add(guess)
-        guesses_left = 7 - len(guesses - word_set)
+            if (self.guesses & self.word_set) == self.word_set:
+                print('You win! Blast off!')
+                game_over = True
 
-        print_guesses(guesses)
-        print('You have {} guess(es) left'.format(guesses_left))
+            elif not self.guesses_left():
+                print('You lose. Staying grounded :(')
+                game_over = True
 
-        # All guesses in words
-        if (guesses & word_set) == word_set:
-            print('You win!')
-            game_over = True
+            print('-' * 32)
+        print('Game over')
 
-        # No more guesses
-        elif not guesses_left:
-            print('You lose')
-            game_over = True
+    def get_letter_input(self):
+        letter = self.input_eof('Enter a letter: ').lower()
 
-        print('-' * 32)
-    print('Game over')
+        while len(letter) != 1 or not letter.isalpha(): # Verify letter is single word char
+            print('That\'s not a letter')
+            letter = self.input_eof('Enter a letter: ').lower()
 
-def get_letter_input():
-    letter = input_eof('Enter a letter: ').lower()
+        return letter
 
-    while len(letter) != 1 or not letter.isalpha(): # Verify letter is single word char
-        print('That\'s not a letter')
-        letter = input_eof('Enter a letter: ').lower()
+    # Handle CTRL+D or CTRL+Space to keep script alive
+    def input_eof(self, prompt):
+        try:
+            return input(prompt)
+        except EOFError:
+            return self.input_eof('\nNice try: ')
 
-    return letter
+    def print_formatted_word(self):
+        print(' '.join(c if c in self.guesses else '_' for c in self.word))
 
-# Handle CTRL+D or CTRL+Space to keep script alive
-def input_eof(prompt):
-    try:
-        return input(prompt)
-    except EOFError:
-        return input_eof('\nNice try: ')
+    def print_guesses(self):
+        print('You\'ve guessed', ', '.join(self.guesses))
+        print('You have {} guess(es) left'.format(self.guesses_left()))
 
-def print_formatted_word(word, guesses):
-    print(' '.join(c if c in guesses else '_' for c in word))
-
-def print_guesses(guesses):
-    print('You\'ve guessed', ', '.join(guesses))
+    def guesses_left(self):
+        return 7 - len(self.guesses - self.word_set)
 
 if __name__ == '__main__':
-    main()
+    # Word list from https://www.prdaily.com/Main/Articles/20880.aspx
+    SpaceMan(('awkward', 'bagpipes', 'banjo', 'bungler', 'croquet', 'crypt', 'dwarves', 'fervid', 'fishhook', 'fjord', 'gazebo', 'gypsy', 'haiku', 'haphazard', 'hyphen', 'ivory', 'jazzy', 'jiffy', 'jinx', 'jukebox', 'kayak', 'kiosk', 'klutz', 'memento', 'mystify', 'numbskull', 'ostracize', 'oxygen', 'pajama', 'phlegm', 'pixel', 'polka', 'quad', 'quip', 'rhythmic', 'rogue', 'sphinx', 'squawk', 'swivel', 'toady', 'twelfth', 'unzip', 'waxy', 'wildebeest', 'yacht', 'zealous', 'zigzag', 'zippy', 'zombie')).run_game()
