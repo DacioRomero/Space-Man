@@ -1,6 +1,5 @@
-#!/usr/bin/env python3
-
 import random
+
 
 class SpaceMan():
     def __init__(self, words):
@@ -38,7 +37,7 @@ class SpaceMan():
     def get_letter_input(self):
         letter = self.input_eof('Enter a letter: ').lower()
 
-        while len(letter) != 1 or not letter.isalpha(): # Verify letter is single word char
+        while len(letter) != 1 or not letter.isalpha():
             print('That\'s not a letter')
             letter = self.input_eof('Enter a letter: ').lower()
 
